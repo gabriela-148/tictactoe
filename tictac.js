@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   container.appendChild(messageDiv);
   container.appendChild(resetBtn);
 
-  let cells = Array(9).fill(null);
+  let cells = [null, null, null, null, null, null, null, null, null];
   let isGameOver = false;
 
   const winningCombos = [
@@ -26,20 +26,25 @@ document.addEventListener("DOMContentLoaded", function () {
   ];
 
   function checkWinner(player) {
-    return winningCombos.some(combo =>
-      combo.every(index => cells[index] === player)
-    );
+    return winningCombos.some(function(combo) {
+      return combo.every(function(index) {
+        return cells[index] === player;
+      });
+    });
   }
 
   function checkDraw() {
-    return cells.every(cell => cell !== null);
+    return cells.every(function(cell) {
+      return cell !== null;
+    });
   }
 
   function aiMove() {
     if (isGameOver) return;
 
-    for (let player of ['O', 'X']) {
-      for (let i = 0; i < cells.length; i++) {
+    for (let p = 0; p < 2; p++) {
+      let player = p === 0 ? 'O' : 'X';
+      for (let i = 0; i < 9; i++) {
         if (cells[i] === null) {
           cells[i] = player;
           if (checkWinner(player)) {
@@ -53,13 +58,13 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    let emptyIndices = [];
-    for (let i = 0; i < cells.length; i++) {
-      if (cells[i] === null) emptyIndices.push(i);
+    let empty = [];
+    for (let i = 0; i < 9; i++) {
+      if (cells[i] === null) empty.push(i);
     }
 
-    if (emptyIndices.length === 0) return;
-    let move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    if (empty.length === 0) return;
+    let move = empty[Math.floor(Math.random() * empty.length)];
     cells[move] = 'O';
     updateBoard();
     endTurn();
@@ -67,14 +72,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateBoard() {
     boardDiv.innerHTML = '';
-    for (let i = 0; i < cells.length; i++) {
-      const cell = document.createElement('div');
+    for (let i = 0; i < 9; i++) {
+      let cell = document.createElement('div');
       cell.className = 'cell';
       if (cells[i]) {
         cell.textContent = cells[i];
         cell.classList.add('taken');
       }
-      cell.addEventListener('click', () => handleClick(i));
+      cell.addEventListener('click', function() {
+        handleClick(i);
+      });
       boardDiv.appendChild(cell);
     }
   }
@@ -102,8 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  resetBtn.addEventListener('click', () => {
-    cells = Array(9).fill(null);
+  resetBtn.addEventListener('click', function () {
+    cells = [null, null, null, null, null, null, null, null, null];
     isGameOver = false;
     messageDiv.textContent = '';
     updateBoard();
