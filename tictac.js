@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("Tic Tac Toe script loaded!");
+  ...
+});
+
 <style>
   #tictactoe-container {
     display: flex;
