@@ -1,57 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Tic Tac Toe script loaded!");
-});
-
-<style>
-  #tictactoe-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    margin-top: 40px;
-  }
-  .board {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 5px;
-  }
-  .cell {
-    width: 100px;
-    height: 100px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    cursor: pointer;
-    border: 2px solid #333;
-  }
-  .cell.taken {
-    cursor: not-allowed;
-  }
-  #message {
-    margin-top: 20px;
-    font-size: 1.2em;
-  }
-  #reset {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 1em;
-  }
-</style>
-
-<script>
-document.addEventListener(\"DOMContentLoaded\", function () {
   const container = document.getElementById('tictactoe-container');
+
   const boardDiv = document.createElement('div');
   boardDiv.className = 'board';
   boardDiv.id = 'board';
+
   const messageDiv = document.createElement('div');
   messageDiv.id = 'message';
+
   const resetBtn = document.createElement('button');
   resetBtn.id = 'reset';
   resetBtn.textContent = 'Restart Game';
+
   container.appendChild(boardDiv);
   container.appendChild(messageDiv);
   container.appendChild(resetBtn);
@@ -93,7 +53,11 @@ document.addEventListener(\"DOMContentLoaded\", function () {
       }
     }
 
-    let emptyIndices = cells.map((cell, i) => cell === null ? i : null).filter(i => i !== null);
+    let emptyIndices = [];
+    for (let i = 0; i < cells.length; i++) {
+      if (cells[i] === null) emptyIndices.push(i);
+    }
+
     if (emptyIndices.length === 0) return;
     let move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
     cells[move] = 'O';
@@ -103,16 +67,16 @@ document.addEventListener(\"DOMContentLoaded\", function () {
 
   function updateBoard() {
     boardDiv.innerHTML = '';
-    cells.forEach((value, i) => {
+    for (let i = 0; i < cells.length; i++) {
       const cell = document.createElement('div');
       cell.className = 'cell';
-      if (value) {
-        cell.textContent = value;
+      if (cells[i]) {
+        cell.textContent = cells[i];
         cell.classList.add('taken');
       }
       cell.addEventListener('click', () => handleClick(i));
       boardDiv.appendChild(cell);
-    });
+    }
   }
 
   function handleClick(i) {
@@ -121,7 +85,7 @@ document.addEventListener(\"DOMContentLoaded\", function () {
     updateBoard();
     endTurn();
     if (!isGameOver) {
-      setTimeout(aiMove, 500);
+      setTimeout(aiMove, 300);
     }
   }
 
@@ -147,4 +111,3 @@ document.addEventListener(\"DOMContentLoaded\", function () {
 
   updateBoard();
 });
-</script>
